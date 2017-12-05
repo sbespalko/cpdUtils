@@ -17,14 +17,14 @@ import org.springframework.stereotype.Controller;
  */
 @Slf4j
 @Controller
-public class ExporterCsv11 extends Exporter11 {
+public class CsvExporter11 extends Exporter11 {
 
-  public ExporterCsv11(Model model, CsvTransformer11 transformer) {
+  public CsvExporter11(Model model, CsvTransformer11 transformer) {
     super(transformer, model);
   }
 
   @Override
-  public void exportTo(String fileName) throws IOException {
+  public void exportTo(String fileName, String filter) throws IOException {
     //должно быть в начале, чтобы не делать остальную работу, если путь некорректный
     Path out = Paths.get(fileName);
     Files.createFile(out);

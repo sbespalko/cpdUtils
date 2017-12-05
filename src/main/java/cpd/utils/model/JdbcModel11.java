@@ -34,7 +34,12 @@ public class JdbcModel11 implements Model {
 
   @Override
   public List<Promotion> getAll() {
-    List<String> stringsPromotion = jdbcTemplate.query(GET_All_SQL, (rs, rowNum) -> {
+    return getAll("");
+  }
+
+  @Override
+  public List<Promotion> getAll(String filter) {
+    List<String> stringsPromotion = jdbcTemplate.query(GET_All_SQL + " " + filter, (rs, rowNum) -> {
       Blob blob = rs.getBlob(PROMO_COLUMN);
       return new String(blob.getBytes(1, (int) blob.length()));
     });
@@ -42,11 +47,16 @@ public class JdbcModel11 implements Model {
   }
 
   @Override
-  public List<String> getRaw() {
-    return jdbcTemplate.query(GET_All_SQL, (rs, rowNum) -> {
+  public List<String> getRaw(String filter) {
+    return jdbcTemplate.query(GET_All_SQL + " " + filter, (rs, rowNum) -> {
       Blob blob = rs.getBlob(PROMO_COLUMN);
       return new String(blob.getBytes(1, (int) blob.length()));
     });
+  }
+
+  @Override
+  public List<String> getRaw() {
+    return getRaw("");
   }
 
   @Override

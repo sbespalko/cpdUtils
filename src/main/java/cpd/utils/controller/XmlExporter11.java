@@ -20,13 +20,13 @@ import org.springframework.stereotype.Component;
  */
 @Slf4j
 @Component
-public class ExporterXml11 extends Exporter11 {
-  public ExporterXml11(Model model, XmlTransformer11 transformer) {
+public class XmlExporter11 extends Exporter11 {
+  public XmlExporter11(Model model, XmlTransformer11 transformer) {
     super(transformer, model);
   }
 
   @Override
-  public void exportTo(String dirName) throws IOException {
+  public void exportTo(String dirName, String filter) throws IOException {
     //должно быть в начале, чтобы не делать остальную работу, если путь некорректный
     Path out = Paths.get(dirName);
     if (Files.exists(out)) {
