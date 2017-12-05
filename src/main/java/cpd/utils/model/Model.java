@@ -10,6 +10,7 @@ import java.util.List;
 
 public interface Model {
   List<Promotion> getAll();
+  List<String> getRaw();
   //List<Promotion> getByConditions(List<TCondition> conditions);
   Promotion getById(Long promotionId);
   Promotion getByName(String promotionName);

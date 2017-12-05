@@ -1,13 +1,13 @@
 package cpd.utils.model;
 
+import cpd.utils.model.v10502.Promotion;
 import cpd.utils.transformer.Transformer;
+import cpd.utils.transformer.XmlTransformer11;
 import java.sql.Blob;
-import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import cpd.utils.model.v10502.Promotion;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
@@ -15,18 +15,21 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
  * @since 04.12.2017
  */
 @Repository
-public class JdbcModelCpd11 implements Model {
+public class JdbcModel11 implements Model {
   private static final String PROMO_TABLE = "PD_PROMOTION_OVERVIEW";
   private static final String PROMO_COLUMN = "UI_DATA_LAST_CHANGED";
   private static final String GET_All_SQL = "SELECT " + PROMO_COLUMN + " FROM " + PROMO_TABLE;
 
-  private final JdbcTemplate jdbcTemplate;
-  private final Transformer transformerCpd11;
+  private Transformer transformer;
+  private JdbcTemplate jdbcTemplate;
+
+  public JdbcModel11(Transformer transformer) {
+    this.transformer = transformer;
+  }
 
   @Autowired
-  public JdbcModelCpd11(JdbcTemplate jdbcTemplate, Transformer xmlTransformerCpd11) {
+  public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
     this.jdbcTemplate = jdbcTemplate;
-    this.transformerCpd11 = xmlTransformerCpd11;
   }
 
   @Override
@@ -35,7 +38,15 @@ public class JdbcModelCpd11 implements Model {
       Blob blob = rs.getBlob(PROMO_COLUMN);
       return new String(blob.getBytes(1, (int) blob.length()));
     });
-    return transformerCpd11.transformFrom(stringsPromotion);
+    return transformer.deserialize(stringsPromotion);
+  }
+
+  @Override
+  public List<String> getRaw() {
+    return jdbcTemplate.query(GET_All_SQL, (rs, rowNum) -> {
+      Blob blob = rs.getBlob(PROMO_COLUMN);
+      return new String(blob.getBytes(1, (int) blob.length()));
+    });
   }
 
   @Override

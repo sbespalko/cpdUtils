@@ -13,11 +13,11 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
  * @since 04.12.2017
  */
 @Component
-public class CsvTransformerCpd11 implements Transformer {
+public class CsvTransformer11 implements Transformer {
 
 
   @Override
-  public List<String> transformTo(Promotion promotion) {
+  public List<String> serialize(Promotion promotion) {
     Promotion.GlobalData promoGlobalData = promotion.getGlobalData();
     List<String> csv = new ArrayList<>();
     String promoLine = CsvCreator
@@ -40,26 +40,26 @@ public class CsvTransformerCpd11 implements Transformer {
   }
 
   @Override
-  public List<List<String>> transformTo(List<Promotion> promotions) {
+  public List<List<String>> serialize(List<Promotion> promotions) {
     List<List<String>> listCsv = new ArrayList<>();
     for (Promotion promotion : promotions) {
       //добавляем header
       List<String> csv = new ArrayList<>();
       String header = CsvCreator.createLine((Object[]) csvHeader.values());
       csv.add(header);
-      csv.addAll(transformTo(promotion));
+      csv.addAll(serialize(promotion));
       listCsv.add(csv);
     }
     return listCsv;
   }
 
   @Override
-  public Promotion transformFrom(String text) {
+  public Promotion deserialize(String text) {
     throw new NotImplementedException();
   }
 
   @Override
-  public List<Promotion> transformFrom(List<String> text) {
+  public List<Promotion> deserialize(List<String> text) {
     throw new NotImplementedException();
   }
 

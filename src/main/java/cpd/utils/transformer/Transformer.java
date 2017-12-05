@@ -13,26 +13,26 @@ public interface Transformer {
    * @param promotion
    * @return text of one promotion
    */
-  List<String> transformTo(Promotion promotion);
+  List<String> serialize(Promotion promotion);
 
   /**
    * promotion -> text
    * @param promotions
    * @return text of all promotions
    */
-  List<List<String>> transformTo(List<Promotion> promotions);
+  List<List<String>> serialize(List<Promotion> promotions);
 
   /**
    * text -> promotion
    * @param text
    * @return one promotion from text
    */
-  Promotion transformFrom(String text);
+  Promotion deserialize(String text);
 
   /**
    * text -> promotion
    * @param text
    * @return all promotions from text
    */
-  List<Promotion> transformFrom(List<String> text);
+  List<Promotion> deserialize(List<String> text);
 }

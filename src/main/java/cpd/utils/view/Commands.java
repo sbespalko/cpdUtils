@@ -1,5 +1,7 @@
 package cpd.utils.view;
 
+import cpd.utils.controller.ExporterCsv11;
+import cpd.utils.controller.ExporterXml11;
 import java.io.IOException;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,7 +10,6 @@ import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
 import cpd.utils.controller.Exporter;
-import cpd.utils.helper.ConsoleService;
 
 /**
  * @author bespalko
@@ -17,18 +18,27 @@ import cpd.utils.helper.ConsoleService;
 @ShellComponent
 @Slf4j
 public class Commands {
-  private final Exporter exporterCpd11;
+  private final Exporter exporterCsv11;
+  private final Exporter exporterXml11;
   private @Setter @Getter ConsoleService console;
 
-  public Commands(ConsoleService console, Exporter exporterCpd11) {
+  public Commands(ConsoleService console, ExporterCsv11 exporterCsv11, ExporterXml11 exporterXml11) {
     this.console = console;
-    this.exporterCpd11 = exporterCpd11;
+    this.exporterCsv11 = exporterCsv11;
+    this.exporterXml11 = exporterXml11;
   }
 
-  @ShellMethod("exportTo promotions from CPD11 to <file.csv> (defaul=exportTo.csv)")
-  public void exportCpd11(@ShellOption(defaultValue = "exportTo.csv") String fileName) throws IOException {
-    log.info("start exporterCpd11.exportTo({})", fileName);
-    exporterCpd11.exportTo(fileName);
-    log.info("finish exporterCpd11.exportTo({})", fileName);
+  @ShellMethod("save promotions from CPD11 to <file.csv> (defaul=export11.csv)")
+  public void exportCsv11(@ShellOption(defaultValue = "export11.csv") String fileName) throws IOException {
+    log.info("start exporterCsv11.exportTo({})", fileName);
+    exporterCsv11.exportTo(fileName);
+    log.info("finish exporterCsv11.exportTo({})", fileName);
+  }
+
+  @ShellMethod("save promotions from CPD11 to <folder> (default=raw11/)")
+  public void exportXml11(@ShellOption(defaultValue = "raw11") String dirName) throws IOException {
+    log.info("start exporterCsv11.exportTo({})", dirName);
+    exporterXml11.exportTo(dirName);
+    log.info("finish exporterCsv11.exportTo({})", dirName);
   }
 }
