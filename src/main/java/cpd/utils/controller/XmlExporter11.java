@@ -31,9 +31,8 @@ public class XmlExporter11 extends Exporter11 {
     Path out = Paths.get(dirName);
     if (Files.exists(out)) {
       deleteDirectory(out);
-    } else {
-      Files.createDirectory(out);
     }
+    Files.createDirectory(out);
 
     log.info("Receive promotions");
     List<String> listXml = model.getRaw(filter);
