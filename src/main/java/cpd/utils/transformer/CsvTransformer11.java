@@ -3,10 +3,11 @@ package cpd.utils.transformer;
 import cpd.utils.helper.CsvCreator;
 import cpd.utils.model.v10502.Promotion;
 import cpd.utils.model.v10502.TCondition;
-import java.util.ArrayList;
-import java.util.List;
 import org.springframework.stereotype.Component;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author bespalko
@@ -14,7 +15,6 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
  */
 @Component
 public class CsvTransformer11 implements Transformer {
-
 
   @Override
   public List<String> serialize(Promotion promotion) {

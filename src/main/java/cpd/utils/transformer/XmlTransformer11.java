@@ -1,18 +1,17 @@
 package cpd.utils.transformer;
 
-import static java.util.stream.Collectors.toList;
-
 import cpd.utils.model.v10502.Promotion;
-import java.util.List;
-import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
+import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  * @author bespalko
  * @since 04.12.2017
  */
-@Primary
 @Component
 public class XmlTransformer11 implements Transformer {
 

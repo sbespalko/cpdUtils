@@ -28,6 +28,8 @@ repositories {
 dependencies {
   compile('org.springframework.boot:spring-boot-starter-jdbc')
   compile('org.springframework.shell:spring-shell-starter:2.0.0.M2')
+  //need to install into mavenlocal()
+  //D:\>mvn install:install-file -Dfile=ojdbc6.jar -DgroupId=com.oracle -DartifactId=ojdbc6 -Dversion=11.2.0.4.0 -Dpackaging=jar
   compile('com.oracle:ojdbc6:11.2.0.4.0')
   compileOnly('org.projectlombok:lombok')
   testCompile('org.springframework.boot:spring-boot-starter-test')

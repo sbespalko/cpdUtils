@@ -2,25 +2,24 @@ package cpd.utils.controller;
 
 import cpd.utils.model.Model;
 import cpd.utils.model.v10502.Promotion;
-import cpd.utils.transformer.CsvTransformer11;
+import cpd.utils.transformer.Transformer;
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Controller;
 
 /**
  * @author bespalko
  * @since 04.12.2017
  */
 @Slf4j
-@Controller
 public class CsvExporter11 extends Exporter11 {
 
-  public CsvExporter11(Model model, CsvTransformer11 transformer) {
-    super(transformer, model);
+  public CsvExporter11(Model model, Transformer transformer) {
+    super(model, transformer);
   }
 
   @Override

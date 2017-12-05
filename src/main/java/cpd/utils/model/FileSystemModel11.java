@@ -2,19 +2,15 @@ package cpd.utils.model;
 
 import cpd.utils.model.v10502.Promotion;
 import cpd.utils.transformer.Transformer;
-import java.io.IOException;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.PathMatcher;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Stream;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
+import java.io.IOException;
+import java.nio.file.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * @author bespalko
@@ -47,6 +43,10 @@ public class FileSystemModel11 implements Model {
 
   private List<String> getXmlTextFiles(Path path) {
     List<String> xmlTextFiles = new ArrayList<>();
+    if(Files.notExists(path)){
+      log.info("Path: {} not exist", path.toAbsolutePath().toString());
+      return xmlTextFiles;
+    }
     try (Stream<Path> paths = Files.walk(path)) {
       paths.filter(file -> Files.isRegularFile(file) && matcher.matches(file)).forEach(file -> {
         try {
@@ -69,15 +69,5 @@ public class FileSystemModel11 implements Model {
   @Override
   public List<String> getRaw(String filter) {
     return getRaw();
-  }
-
-  @Override
-  public Promotion getById(Long promotionId) {
-    throw new NotImplementedException();
-  }
-
-  @Override
-  public Promotion getByName(String promotionName) {
-    throw new NotImplementedException();
   }
 }

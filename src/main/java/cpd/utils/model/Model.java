@@ -13,7 +13,4 @@ public interface Model {
   List<Promotion> getAll(String filter);
   List<String> getRaw();
   List<String> getRaw(String filter);
-  //List<Promotion> getByConditions(List<TCondition> conditions);
-  Promotion getById(Long promotionId);
-  Promotion getByName(String promotionName);
 }

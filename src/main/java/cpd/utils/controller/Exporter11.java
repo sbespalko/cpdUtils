@@ -18,7 +18,7 @@ public abstract class Exporter11 implements Exporter {
   final Model model;
   final Transformer transformer;
 
-  public Exporter11(Transformer transformer, Model model) {
+  Exporter11(Model model, Transformer transformer) {
     this.transformer = transformer;
     this.model = model;
   }

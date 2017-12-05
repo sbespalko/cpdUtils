@@ -1,28 +1,22 @@
 package cpd.utils.controller;
 
 import cpd.utils.model.Model;
-import cpd.utils.transformer.XmlTransformer11;
+import cpd.utils.transformer.Transformer;
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.IOException;
-import java.nio.file.FileVisitResult;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.SimpleFileVisitor;
-import java.nio.file.StandardOpenOption;
+import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.List;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 
 /**
  * @author bespalko
  * @since 04.12.2017
  */
 @Slf4j
-@Component
 public class XmlExporter11 extends Exporter11 {
-  public XmlExporter11(Model model, XmlTransformer11 transformer) {
-    super(transformer, model);
+  public XmlExporter11(Model model, Transformer transformer) {
+    super(model, transformer);
   }
 
   @Override
