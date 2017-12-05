@@ -37,8 +37,8 @@ public class Commands {
 
   @ShellMethod("save promotions from CPD11 to <folder> (default=raw11/)")
   public void exportXml11(@ShellOption(defaultValue = "raw11") String dirName, @ShellOption(defaultValue = "") String filter) throws IOException {
-    log.info("start csvExporter11.exportTo({})", dirName);
+    log.info("start xmlExporter11.exportTo({})", dirName);
     xmlExporter11.exportTo(dirName, filter);
-    log.info("finish csvExporter11.exportTo({})", dirName);
+    log.info("finish xmlExporter11.exportTo({})", dirName);
   }
 }

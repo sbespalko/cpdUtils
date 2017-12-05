@@ -36,7 +36,7 @@ public class XmlExporter11 extends Exporter11 {
     }
 
     log.info("Receive promotions");
-    List<String> listXml = model.getRaw();
+    List<String> listXml = model.getRaw(filter);
 
     log.info("Save XML string into files");
     for (int i = 0; i < listXml.size(); i++) {

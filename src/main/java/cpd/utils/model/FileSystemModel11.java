@@ -63,12 +63,12 @@ public class FileSystemModel11 implements Model {
 
   @Override
   public List<Promotion> getAll(String filter) {
-    throw new NotImplementedException();
+    return getAll();
   }
 
   @Override
   public List<String> getRaw(String filter) {
-    throw new NotImplementedException();
+    return getRaw();
   }
 
   @Override

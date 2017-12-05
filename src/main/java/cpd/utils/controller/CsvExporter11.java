@@ -31,7 +31,7 @@ public class CsvExporter11 extends Exporter11 {
     Files.deleteIfExists(out);
 
     log.info("Receive promotions");
-    List<Promotion> promotions = model.getAll();
+    List<Promotion> promotions = model.getAll(filter);
 
     log.info("Transform promotions into CSV string");
     List<List<String>> listCsv = transformer.serialize(promotions);
