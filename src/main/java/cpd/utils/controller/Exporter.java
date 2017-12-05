@@ -7,5 +7,5 @@ import java.io.IOException;
  * @since 04.12.2017
  */
 public interface Exporter {
-  void exportTo(String fileName) throws IOException;
+  void exportTo(String fileName, String filter) throws IOException;
 }

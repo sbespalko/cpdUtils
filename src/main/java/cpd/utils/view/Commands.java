@@ -1,7 +1,7 @@
 package cpd.utils.view;
 
-import cpd.utils.controller.ExporterCsv11;
-import cpd.utils.controller.ExporterXml11;
+import cpd.utils.controller.CsvExporter11;
+import cpd.utils.controller.XmlExporter11;
 import java.io.IOException;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,27 +18,27 @@ import cpd.utils.controller.Exporter;
 @ShellComponent
 @Slf4j
 public class Commands {
-  private final Exporter exporterCsv11;
-  private final Exporter exporterXml11;
+  private final Exporter csvExporter11;
+  private final Exporter xmlExporter11;
   private @Setter @Getter ConsoleService console;
 
-  public Commands(ConsoleService console, ExporterCsv11 exporterCsv11, ExporterXml11 exporterXml11) {
+  public Commands(ConsoleService console, CsvExporter11 csvExporter11, XmlExporter11 xmlExporter11) {
     this.console = console;
-    this.exporterCsv11 = exporterCsv11;
-    this.exporterXml11 = exporterXml11;
+    this.csvExporter11 = csvExporter11;
+    this.xmlExporter11 = xmlExporter11;
   }
 
   @ShellMethod("save promotions from CPD11 to <file.csv> (defaul=export11.csv)")
-  public void exportCsv11(@ShellOption(defaultValue = "export11.csv") String fileName) throws IOException {
-    log.info("start exporterCsv11.exportTo({})", fileName);
-    exporterCsv11.exportTo(fileName);
-    log.info("finish exporterCsv11.exportTo({})", fileName);
+  public void exportCsv11(@ShellOption(defaultValue = "export11.csv") String fileName, @ShellOption(defaultValue = "") String filter) throws IOException {
+    log.info("start csvExporter11.exportTo({})", fileName);
+    csvExporter11.exportTo(fileName, filter);
+    log.info("finish csvExporter11.exportTo({})", fileName);
   }
 
   @ShellMethod("save promotions from CPD11 to <folder> (default=raw11/)")
-  public void exportXml11(@ShellOption(defaultValue = "raw11") String dirName) throws IOException {
-    log.info("start exporterCsv11.exportTo({})", dirName);
-    exporterXml11.exportTo(dirName);
-    log.info("finish exporterCsv11.exportTo({})", dirName);
+  public void exportXml11(@ShellOption(defaultValue = "raw11") String dirName, @ShellOption(defaultValue = "") String filter) throws IOException {
+    log.info("start xmlExporter11.exportTo({})", dirName);
+    xmlExporter11.exportTo(dirName, filter);
+    log.info("finish xmlExporter11.exportTo({})", dirName);
   }
 }

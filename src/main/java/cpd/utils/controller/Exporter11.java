@@ -23,7 +23,7 @@ public abstract class Exporter11 implements Exporter {
     this.model = model;
   }
 
-  public abstract void exportTo(String fileName) throws IOException;
+  public abstract void exportTo(String fileName, String filter) throws IOException;
 
   /**
    * Convert List<List<String> to List<String> and save it to file;
