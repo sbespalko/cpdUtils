@@ -13,14 +13,14 @@ public interface Transformer {
    * @param promotion
    * @return text of one promotion
    */
-  List<String> serialize(Promotion promotion);
+  String serialize(Promotion promotion);
 
   /**
    * promotion -> text
    * @param promotions
    * @return text of all promotions
    */
-  List<List<String>> serialize(List<Promotion> promotions);
+  List<String> serialize(List<Promotion> promotions);
 
   /**
    * text -> promotion

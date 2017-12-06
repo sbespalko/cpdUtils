@@ -212,33 +212,32 @@ import javax.xml.datatype.XMLGregorianCalendar;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "T_Rule", propOrder = {
-    "globalData",
-    "simpleRebate",
-    "mixAndMatch",
-    "set",
-    "toBePaidQuantity",
-    "bonusPoints",
-    "manualRebate",
-    "noRebate"
+  "info",
+  "globalData",
+  "simpleRebate",
+  "mixAndMatch",
+  "set",
+  "toBePaidQuantity",
+  "bonusPoints",
+  "manualRebate",
+  "noRebate",
+  "eligibility"
 })
 public class TRule {
+    @XmlElement(name = "Info") protected TInfo info;
+    @XmlElement(name = "RuleData", required = true) protected TRule.GlobalData globalData;
+    @XmlElement(name = "SimpleRebate") protected TRule.SimpleRebate simpleRebate;
+    @XmlElement(name = "MixAndMatch") protected TRule.MixAndMatch mixAndMatch;
+    @XmlElement(name = "Set") protected TRule.Set set;
+    @XmlElement(name = "ToBePaidQuantity") protected Double toBePaidQuantity;
+    @XmlElement(name = "BonusPoints") protected TRule.BonusPoints bonusPoints;
+    @XmlElement(name = "ManualRebate") protected Boolean manualRebate;
+    @XmlElement(name = "NoRebate") protected Boolean noRebate;
+    @XmlElement(name = "Eligibility", required = true) protected List<TEligibility> eligibility;
 
-    @XmlElement(name = "GlobalData", required = true)
-    protected TRule.GlobalData globalData;
-    @XmlElement(name = "SimpleRebate")
-    protected TRule.SimpleRebate simpleRebate;
-    @XmlElement(name = "MixAndMatch")
-    protected TRule.MixAndMatch mixAndMatch;
-    @XmlElement(name = "Set")
-    protected TRule.Set set;
-    @XmlElement(name = "ToBePaidQuantity")
-    protected Double toBePaidQuantity;
-    @XmlElement(name = "BonusPoints")
-    protected TRule.BonusPoints bonusPoints;
-    @XmlElement(name = "ManualRebate")
-    protected Boolean manualRebate;
-    @XmlElement(name = "NoRebate")
-    protected Boolean noRebate;
+    public TInfo getInfo() {
+        return info;
+    }
 
     /**
      * Gets the value of the globalData property.
@@ -430,6 +429,35 @@ public class TRule {
      */
     public void setNoRebate(Boolean value) {
         this.noRebate = value;
+    }
+
+    /**
+     * Gets the value of the eligibility property.
+     *
+     * <p>
+     * This accessor method returns a reference to the live list,
+     * not a snapshot. Therefore any modification you make to the
+     * returned list will be present inside the JAXB object.
+     * This is why there is not a <CODE>set</CODE> method for the eligibility property.
+     *
+     * <p>
+     * For example, to add a new item, do as follows:
+     * <pre>
+     *    getEligibility().add(newItem);
+     * </pre>
+     *
+     *
+     * <p>
+     * Objects of the following type(s) are allowed in the list
+     * {@link TEligibility }
+     *
+     *
+     */
+    public List<TEligibility> getEligibility() {
+        if (eligibility == null) {
+            eligibility = new ArrayList<TEligibility>();
+        }
+        return this.eligibility;
     }
 
 
@@ -1944,7 +1972,7 @@ public class TRule {
         @XmlElement(name = "ReductionMethodCode", required = true)
         protected TReductionMethodCode reductionMethodCode;
         @XmlElement(name = "Value")
-        protected double value;
+        protected String value;
 
         /**
          * Gets the value of the reductionMethodCode property.
@@ -1974,7 +2002,7 @@ public class TRule {
          * Gets the value of the value property.
          * 
          */
-        public double getValue() {
+        public String getValue() {
             return value;
         }
 
@@ -1982,7 +2010,7 @@ public class TRule {
          * Sets the value of the value property.
          * 
          */
-        public void setValue(double value) {
+        public void setValue(String value) {
             this.value = value;
         }
 

@@ -20,12 +20,12 @@ import javax.xml.bind.annotation.XmlType;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 /**
- * <p>Java class for Promotion complex type.
+ * <p>Java class for promotion152 complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="Promotion">
+ * &lt;complexType name="promotion152">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
@@ -72,19 +72,21 @@ import javax.xml.datatype.XMLGregorianCalendar;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Promotion", propOrder = {
+    "info",
     "globalData",
     "condition"
 })
 public class Promotion {
 
-    @XmlElement(name = "GlobalData")
-    protected Promotion.GlobalData globalData;
-    @XmlElement(name = "Condition")
-    protected List<TCondition> condition;
-    @XmlAttribute(name = "ProcessMode", required = true)
-    protected TProcessMode processMode;
-    @XmlAttribute(name = "NumberOfConditions")
-    protected BigInteger numberOfConditions;
+    @XmlElement(name = "Info") protected TInfo info;
+    @XmlElement(name = "PromotionData") protected Promotion.GlobalData globalData;
+    @XmlElement(name = "Rebate") protected List<TCondition> condition;
+    @XmlAttribute(name = "ProcessMode", required = true) protected TProcessMode processMode;
+    @XmlAttribute(name = "NumberOfConditions") protected BigInteger numberOfConditions;
+
+    public TInfo getInfo() {
+        return info;
+    }
 
     /**
      * Gets the value of the globalData property.

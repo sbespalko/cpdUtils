@@ -5,7 +5,6 @@ import cpd.utils.controller.XmlExporter11;
 import cpd.utils.model.FileSystemModel11;
 import cpd.utils.model.Model;
 import cpd.utils.transformer.CsvTransformer11;
-import cpd.utils.transformer.Transformer;
 import cpd.utils.transformer.XmlTransformer11;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
