@@ -10,6 +10,7 @@ import static cpd.utils.transformer.CsvHeader.MERCH_GROUP;
 import static cpd.utils.transformer.CsvHeader.PLU;
 import static cpd.utils.transformer.CsvHeader.REBATE;
 import static cpd.utils.transformer.CsvHeader.TO;
+import static cpd.utils.transformer.CsvHeader.TO_BE_PAID_QUANTITY;
 import static cpd.utils.transformer.CsvHeader.TYPE;
 
 import cpd.utils.helper.CsvCreator;
@@ -17,6 +18,7 @@ import cpd.utils.model.v10502.Promotion;
 import cpd.utils.model.v10502.TCondition;
 import cpd.utils.model.v10502.TEligibility;
 import cpd.utils.model.v10502.TItemIDList;
+import cpd.utils.model.v10502.TMerchandiseHierarchyGroupIDList;
 import cpd.utils.model.v10502.TRule;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -58,14 +60,8 @@ public class CsvTransformer11 implements Transformer {
         case SIMPLE:
           getLineSimple(tRule, currLine);
           break;
-        case COUPON:
-          getLineCoupon(tRule, currLine);
-          break;
         case MIX_AND_MATCH:
           getLineMixAndMatch(tRule, currLine);
-          break;
-        case MERCHANDISE_HIERARCHY_GROUP:
-          getLineMerchandise_Hierarchy_Group(tRule, currLine);
           break;
         case NO_REBATE:
           getLineNoRebate(tRule, currLine);
@@ -89,57 +85,52 @@ public class CsvTransformer11 implements Transformer {
     return promoLine;
   }
 
-  private void getLineNoRebate(@NonNull TRule tRule, Map<CsvHeader, String> currLine) {
-    listOfLines.add(currLine);
-  }
-
   private void getLinePromotion(@NonNull Promotion promotion, Map<CsvHeader, String> currLine) {
     Promotion.GlobalData data = promotion.getGlobalData();
     if (data == null) {
       return;
     }
     currLine.put(ID, data.getID());
-    currLine.put(FROM, data.getEffectiveDate() != null ? String.valueOf(data.getEffectiveDate()) : "");
-    currLine.put(TO, data.getEffectiveDate() != null ? String.valueOf(data.getExpiryDate()) : "");
+    if (data.getEffectiveDate() != null) {
+      currLine.put(FROM, String.valueOf(data.getEffectiveDate()));
+    }
+    if (data.getEffectiveDate() != null) {
+      currLine.put(TO, String.valueOf(data.getExpiryDate()));
+    }
     currLine.put(DESC, data.getDescription());
   }
 
-  private String listOfMapsToText(List<Map<CsvHeader, String>> list) {
-    assert list.size() != 0;
-    StringBuilder sb = new StringBuilder();
-    for (Map<CsvHeader, String> line : list) {
-      sb.append(CsvCreator.createLine(line.values().toArray())).append('\n');
-    }
-    listOfLines = null;
-    return sb.toString();
-  }
-
-  private void getLineMerchandise_Hierarchy_Group(@NonNull TRule tRule, Map<CsvHeader, String> currLine) {
-    listOfLines.add(currLine);
+  private void getLineNoRebate(@NonNull TRule tRule, Map<CsvHeader, String> currLine) {
+    fillEligibilitiesLines(tRule.getEligibility(), currLine);
   }
 
   private void getLineMixAndMatch(@NonNull TRule tRule, Map<CsvHeader, String> currLine) {
-    listOfLines.add(currLine);
-  }
-
-  private void getLineCoupon(@NonNull TRule tRule, Map<CsvHeader, String> currLine) {
-    listOfLines.add(currLine);
+    TRule.MixAndMatch mixAndMatch = tRule.getMixAndMatch();
+    if (mixAndMatch != null) {
+      List<TRule.MixAndMatch.MatchingItem> matchingItems = mixAndMatch.getMatchingItem();
+      for (TRule.MixAndMatch.MatchingItem item : matchingItems) {
+        Map<CsvHeader, String> line = new LinkedHashMap<>(currLine);
+        line.put(PLU, item.getItemID());
+        line.put(REBATE, String.valueOf(item.getValue()));
+        listOfLines.add(line);
+      }
+    }
+    fillEligibilitiesLines(tRule.getEligibility(), currLine);
   }
 
   private void getLineSimple(@NonNull TRule tRule, Map<CsvHeader, String> currLine) {
     currLine.put(REBATE, tRule.getSimpleRebate().getValue());
-    List<TEligibility> tEligibilities = tRule.getEligibility();
-    if (tEligibilities == null || tEligibilities.isEmpty()) {
-      listOfLines.add(currLine);
-      return;
-    }
-    for (TEligibility tEligibility : tEligibilities) {
-      getLineEligibility(tEligibility, new LinkedHashMap<>(currLine));
-    }
+    fillEligibilitiesLines(tRule.getEligibility(), currLine);
   }
 
   private void getLineGet3Pay2(@NonNull TRule tRule, Map<CsvHeader, String> currLine) {
-    List<TEligibility> tEligibilities = tRule.getEligibility();
+    if (tRule.getToBePaidQuantity() != null) {
+      currLine.put(TO_BE_PAID_QUANTITY, String.valueOf(tRule.getToBePaidQuantity()));
+    }
+    fillEligibilitiesLines(tRule.getEligibility(), currLine);
+  }
+
+  private void fillEligibilitiesLines(List<TEligibility> tEligibilities, Map<CsvHeader, String> currLine) {
     if (tEligibilities == null || tEligibilities.isEmpty()) {
       listOfLines.add(currLine);
       return;
@@ -163,11 +154,7 @@ public class CsvTransformer11 implements Transformer {
           TItemIDList idList = tEligibility.getItem().getIDList();
           if (idList != null) {
             List<String> IDs = idList.getID();
-            for (String plu : IDs) {
-              Map<CsvHeader, String> line = new LinkedHashMap<>(currLine);
-              line.put(PLU, plu);
-              listOfLines.add(line);
-            }
+            fillLinesByList(currLine, IDs, PLU);
           }
         }
         break;
@@ -180,8 +167,17 @@ public class CsvTransformer11 implements Transformer {
         listOfLines.add(currLine);
         break;
       case MERCHANDISE_HIERARCHY_GROUP:
-        currLine.put(MERCH_GROUP, tEligibility.getMerchandiseHierarchyGroup().getID());
-        listOfLines.add(currLine);
+        String merchId = tEligibility.getMerchandiseHierarchyGroup().getID();
+        if (!StringUtils.isEmpty(merchId)) {
+          currLine.put(MERCH_GROUP, merchId);
+          listOfLines.add(currLine);
+        } else {
+          TMerchandiseHierarchyGroupIDList merchIdList = tEligibility.getMerchandiseHierarchyGroup().getIDList();
+          if (merchIdList != null) {
+            List<String> IDs = merchIdList.getID();
+            fillLinesByList(currLine, IDs, MERCH_GROUP);
+          }
+        }
         break;
       case MARKET_BASKET:
         listOfLines.add(currLine);
@@ -193,6 +189,24 @@ public class CsvTransformer11 implements Transformer {
       log.error("Unexpected TYPE_ELIGIBILITY: " + tEligibility.getInfo().getType() + " in promo: " + currLine);
       listOfLines.add(currLine);
     }
+  }
+
+  private void fillLinesByList(Map<CsvHeader, String> currLine, List<String> values, CsvHeader type) {
+    for (String item : values) {
+      Map<CsvHeader, String> line = new LinkedHashMap<>(currLine);
+      line.put(type, item);
+      listOfLines.add(line);
+    }
+  }
+
+  private String listOfMapsToText(List<Map<CsvHeader, String>> list) {
+    assert list.size() != 0;
+    StringBuilder sb = new StringBuilder();
+    for (Map<CsvHeader, String> line : list) {
+      sb.append(CsvCreator.createLine(line.values().toArray())).append('\n');
+    }
+    listOfLines = null;
+    return sb.toString();
   }
 
   @Override
@@ -220,7 +234,7 @@ public class CsvTransformer11 implements Transformer {
   }
 
   enum TYPE_RULE {
-    GET3PAY2, SIMPLE, COUPON, MERCHANDISE_HIERARCHY_GROUP, MIX_AND_MATCH, NO_REBATE;
+    GET3PAY2, SIMPLE, MIX_AND_MATCH, NO_REBATE;
   }
 
   enum TYPE_ELIGIBILITY {
