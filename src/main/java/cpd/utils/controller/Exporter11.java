@@ -4,7 +4,7 @@ import cpd.utils.model.Model;
 import cpd.utils.transformer.CsvHeader;
 import cpd.utils.transformer.Transformer;
 import java.io.IOException;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
@@ -42,6 +42,6 @@ public abstract class Exporter11 implements Exporter {
         resultCsv.add(csv.substring(headerLength, csv.length() - 1));
       }
     }
-    Files.write(out, resultCsv, Charset.defaultCharset(), StandardOpenOption.CREATE);
+    Files.write(out, resultCsv, StandardCharsets.UTF_8, StandardOpenOption.CREATE);
   }
 }

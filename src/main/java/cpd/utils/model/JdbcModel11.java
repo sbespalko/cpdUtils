@@ -2,6 +2,7 @@ package cpd.utils.model;
 
 import cpd.utils.model.v10502.Promotion;
 import cpd.utils.transformer.Transformer;
+import java.nio.charset.StandardCharsets;
 import java.sql.Blob;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -40,7 +41,7 @@ public class JdbcModel11 implements Model {
       Blob blob = rs.getBlob(PROMO_COLUMNS[1]);
       String blobText = null;
       if (!rs.wasNull()) {
-        blobText = new String(blob.getBytes(1, (int) blob.length()));
+        blobText = new String(blob.getBytes(1, (int) blob.length()), StandardCharsets.UTF_8);
       }
       if (!StringUtils.isEmpty(blobText)) {
         try {
@@ -69,7 +70,7 @@ public class JdbcModel11 implements Model {
         Blob blob = rs.getBlob(PROMO_COLUMNS[1]);
         String textBlob = "";
         if (!rs.wasNull()) {
-          textBlob = new String(blob.getBytes(1, (int) blob.length()));
+          textBlob = new String(blob.getBytes(1, (int) blob.length()), StandardCharsets.UTF_8);
         }
         result.put(id, textBlob);
       }

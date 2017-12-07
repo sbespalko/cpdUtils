@@ -3,6 +3,7 @@ package cpd.utils.controller;
 import cpd.utils.model.Model;
 import cpd.utils.transformer.Transformer;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -38,7 +39,7 @@ public class XmlExporter11 extends Exporter11 {
     log.info("Save XML string into files");
     for (Map.Entry<Long, String> entry : mapXml.entrySet()) {
       Path fileToSave = out.resolve(entry.getKey() + ".xml");
-      Files.write(fileToSave, entry.getValue().getBytes(), StandardOpenOption.CREATE);
+      Files.write(fileToSave, entry.getValue().getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE);
     }
   }
 
