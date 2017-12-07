@@ -2,6 +2,7 @@ package cpd.utils.model;
 
 import cpd.utils.model.v10502.Promotion;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author bespalko
@@ -9,11 +10,8 @@ import java.util.List;
  */
 
 public interface Model {
-  List<Promotion> getAll();
-  List<Promotion> getAll(String filter);
-  List<String> getRaw();
-  List<String> getRaw(String filter);
-  //List<Promotion> getByConditions(List<TCondition> conditions);
-  Promotion getById(Long promotionId);
-  Promotion getByName(String promotionName);
+  List<Promotion> getAll() throws Exception;
+  List<Promotion> getAll(String filter) throws Exception;
+  Map<Long, String> getRaw() throws Exception;
+  Map<Long, String> getRaw(String filter) throws Exception;
 }

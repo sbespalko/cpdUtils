@@ -13,26 +13,26 @@ public interface Transformer {
    * @param promotion
    * @return text of one promotion
    */
-  List<String> serialize(Promotion promotion);
+  String serialize(Promotion promotion) throws Exception;
 
   /**
    * promotion -> text
    * @param promotions
    * @return text of all promotions
    */
-  List<List<String>> serialize(List<Promotion> promotions);
+  List<String> serialize(List<Promotion> promotions) throws Exception;
 
   /**
    * text -> promotion
    * @param text
    * @return one promotion from text
    */
-  Promotion deserialize(String text);
+  Promotion deserialize(String text) throws Exception;
 
   /**
    * text -> promotion
    * @param text
    * @return all promotions from text
    */
-  List<Promotion> deserialize(List<String> text);
+  List<Promotion> deserialize(List<String> text) throws Exception;
 }

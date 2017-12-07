@@ -156,7 +156,8 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "T_Eligibility", propOrder = {
-    "employeeGroupID",
+  "info",
+  "employeeGroupID",
     "customerGroupID",
     "customerID",
     "item",
@@ -168,24 +169,20 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class TEligibility {
 
-    @XmlElement(name = "EmployeeGroupID")
-    protected Long employeeGroupID;
-    @XmlElement(name = "CustomerGroupID")
-    protected String customerGroupID;
-    @XmlElement(name = "CustomerID")
-    protected String customerID;
-    @XmlElement(name = "Item")
-    protected TEligibility.Item item;
-    @XmlElement(name = "MerchandiseHierarchyGroup")
-    protected TEligibility.MerchandiseHierarchyGroup merchandiseHierarchyGroup;
-    @XmlElement(name = "MarketBasketThresholdAmount")
-    protected Double marketBasketThresholdAmount;
-    @XmlElement(name = "Coupon")
-    protected TEligibility.Coupon coupon;
-    @XmlElement(name = "ManualRebateTrigger")
-    protected TEligibility.ManualRebateTrigger manualRebateTrigger;
-    @XmlElement(name = "PositionType")
-    protected BigInteger positionType;
+  @XmlElement(name = "Info") protected TInfo info;
+  @XmlElement(name = "EmployeeGroupID") protected Long employeeGroupID;
+  @XmlElement(name = "CustomerGroupID") protected String customerGroupID;
+  @XmlElement(name = "CustomerID") protected String customerID;
+  @XmlElement(name = "Item") protected TEligibility.Item item;
+  @XmlElement(name = "MerchandiseHierarchyGroup") protected TEligibility.MerchandiseHierarchyGroup merchandiseHierarchyGroup;
+  @XmlElement(name = "MarketBasketThresholdAmount") protected Double marketBasketThresholdAmount;
+  @XmlElement(name = "Coupon") protected TEligibility.Coupon coupon;
+  @XmlElement(name = "ManualRebateTrigger") protected TEligibility.ManualRebateTrigger manualRebateTrigger;
+  @XmlElement(name = "PositionType") protected BigInteger positionType;
+
+  public TInfo getInfo() {
+    return info;
+  }
 
     /**
      * Gets the value of the employeeGroupID property.

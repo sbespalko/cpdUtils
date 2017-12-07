@@ -61,18 +61,20 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "T_Condition", propOrder = {
-    "globalData",
+  "info",
+  "globalData",
     "eligibility",
     "rule"
 })
 public class TCondition {
+    @XmlElement(name = "Info") protected TInfo info;
+    @XmlElement(name = "GlobalData", required = true) protected TCondition.GlobalData globalData;
+    @XmlElement(name = "Eligibility", required = true) protected List<TEligibility> eligibility;
+    @XmlElement(name = "Rule", required = true) protected TRule rule;
 
-    @XmlElement(name = "GlobalData", required = true)
-    protected TCondition.GlobalData globalData;
-    @XmlElement(name = "Eligibility", required = true)
-    protected List<TEligibility> eligibility;
-    @XmlElement(name = "Rule", required = true)
-    protected TRule rule;
+    public TInfo getInfo() {
+        return info;
+    }
 
     /**
      * Gets the value of the globalData property.

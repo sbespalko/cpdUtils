@@ -25,7 +25,7 @@ public class ConsoleService {
   }
 
   public void answer(String msg, Object... args) {
-    out.printf("> ");
+    out.print("> ");
     out.print(ANSI_YELLOW);
     out.printf(msg, (Object[]) args);
     out.print(ANSI_RESET);
@@ -33,10 +33,11 @@ public class ConsoleService {
   }
 
   public void error(Throwable ex, String msg, Object... args) {
+    out.print("> ");
     out.print(ANSI_RED);
     out.printf(msg, (Object[]) args);
     out.print(ANSI_RESET);
     out.println();
-    log.error("", ex);
+    log.debug("", ex);
   }
 }

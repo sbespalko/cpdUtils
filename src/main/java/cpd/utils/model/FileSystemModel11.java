@@ -9,12 +9,13 @@ import java.nio.file.Path;
 import java.nio.file.PathMatcher;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Stream;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
  * @author bespalko
@@ -35,22 +36,37 @@ public class FileSystemModel11 implements Model {
   }
 
   @Override
-  public List<Promotion> getAll() {
-    List<String> xmlTextFiles = getXmlTextFiles(xmlPath);
-    return transformer11.deserialize(xmlTextFiles);
+  public List<Promotion> getAll() throws Exception {
+    Map<Long, String> xmlTextFiles = getXmlTextFiles(xmlPath);
+    List<Promotion> promotions = new ArrayList<>(xmlTextFiles.size());
+    for (Map.Entry<Long, String> entry : xmlTextFiles.entrySet()) {
+      Promotion promotion = new Promotion();
+      promotion = transformer11.deserialize(entry.getValue());
+      Promotion.GlobalData data =
+        promotion.getGlobalData() != null ? promotion.getGlobalData() : new Promotion.GlobalData();
+      data.setID(String.valueOf(entry.getKey()));
+      promotion.setGlobalData(data);
+      promotions.add(promotion);
+    }
+    return promotions;
   }
 
   @Override
-  public List<String> getRaw() {
+  public Map<Long, String> getRaw() {
     return getXmlTextFiles(xmlPath);
   }
 
-  private List<String> getXmlTextFiles(Path path) {
-    List<String> xmlTextFiles = new ArrayList<>();
+  private Map<Long, String> getXmlTextFiles(Path path) {
+    Map<Long, String> xmlTextFiles = new LinkedHashMap<>();
+    if (Files.notExists(path)) {
+      log.error("Path: {} not exist", path.toAbsolutePath().toString());
+      return xmlTextFiles;
+    }
     try (Stream<Path> paths = Files.walk(path)) {
       paths.filter(file -> Files.isRegularFile(file) && matcher.matches(file)).forEach(file -> {
         try {
-          xmlTextFiles.add(new String(Files.readAllBytes(file)));
+          String fileNameWithoutExtention = file.getFileName().toString().replaceFirst("[.][^.]+$", "");
+          xmlTextFiles.put(Long.valueOf(fileNameWithoutExtention), new String(Files.readAllBytes(file)));
         } catch (IOException e) {
           log.error("", e);
         }
@@ -62,22 +78,12 @@ public class FileSystemModel11 implements Model {
   }
 
   @Override
-  public List<Promotion> getAll(String filter) {
+  public List<Promotion> getAll(String filter) throws Exception {
     return getAll();
   }
 
   @Override
-  public List<String> getRaw(String filter) {
+  public Map<Long, String> getRaw(String filter) {
     return getRaw();
-  }
-
-  @Override
-  public Promotion getById(Long promotionId) {
-    throw new NotImplementedException();
-  }
-
-  @Override
-  public Promotion getByName(String promotionName) {
-    throw new NotImplementedException();
   }
 }
