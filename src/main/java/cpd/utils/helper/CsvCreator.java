@@ -13,11 +13,12 @@ public class CsvCreator {
   private static final String DELIMITER = "\";\"";
   private static final String PREFIX = "\"";
   private static final String SUFFIX = "\"";
+  private static final String QUOTE_ESCAPE = "\"\"";
 
   public static String createLine(Object...args) {
     StringJoiner sj = new StringJoiner(DELIMITER, PREFIX, SUFFIX);
     for (Object arg : args) {
-      sj.add(StringUtils.isEmpty(arg) ? EMPTY_FIELD : arg.toString());
+      sj.add(StringUtils.isEmpty(arg) ? EMPTY_FIELD : arg.toString().replaceAll("\"", QUOTE_ESCAPE));
     }
     return sj.toString();
   }

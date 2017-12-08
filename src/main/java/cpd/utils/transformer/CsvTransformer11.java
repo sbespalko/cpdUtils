@@ -50,6 +50,10 @@ public class CsvTransformer11 implements Transformer {
     for (TCondition condition : tConditions) {
       TRule tRule = condition.getRule();
       Map<CsvHeader, String> currLine = new LinkedHashMap<>(promoLine);
+      if(tRule.getInfo() == null) {
+        listOfLines.add(currLine);
+        continue;
+      }
       currLine.put(TYPE, tRule.getInfo().getType());
       try {
         TYPE_RULE typeRule = TYPE_RULE.valueOf(tRule.getInfo().getType());
