@@ -40,10 +40,10 @@ public class FileSystemModel11 implements Model {
     Map<Long, String> xmlTextFiles = getXmlTextFiles(xmlPath);
     List<Promotion> promotions = new ArrayList<>(xmlTextFiles.size());
     for (Map.Entry<Long, String> entry : xmlTextFiles.entrySet()) {
-      Promotion promotion = new Promotion();
-      promotion = transformer11.deserialize(entry.getValue());
-      Promotion.GlobalData data =
-        promotion.getGlobalData() != null ? promotion.getGlobalData() : new Promotion.GlobalData();
+      Promotion promotion = transformer11.deserialize(entry.getValue());
+      Promotion.GlobalData data = promotion.getGlobalData() != null ?
+                                  promotion.getGlobalData() :
+                                  new Promotion.GlobalData();
       data.setID(String.valueOf(entry.getKey()));
       promotion.setGlobalData(data);
       promotions.add(promotion);
@@ -65,8 +65,11 @@ public class FileSystemModel11 implements Model {
     try (Stream<Path> paths = Files.walk(path)) {
       paths.filter(file -> Files.isRegularFile(file) && matcher.matches(file)).forEach(file -> {
         try {
-          String fileNameWithoutExtention = file.getFileName().toString().replaceFirst("[.][^.]+$", "");
-          xmlTextFiles.put(Long.valueOf(fileNameWithoutExtention), new String(Files.readAllBytes(file)));
+          String fileNameWithoutExtention = file.getFileName()
+                                                .toString()
+                                                .replaceFirst("[.][^.]+$", "");
+          xmlTextFiles.put(Long.valueOf(fileNameWithoutExtention),
+                           new String(Files.readAllBytes(file)));
         } catch (IOException e) {
           log.error("", e);
         }

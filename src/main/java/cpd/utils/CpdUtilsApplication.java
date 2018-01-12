@@ -23,6 +23,16 @@ public class CpdUtilsApplication {
   }
 
   @Bean
+  public XmlExporter11 xmlExporter11() {
+    return new XmlExporter11(model11(), new XmlTransformer11());
+  }
+
+  @Bean
+  public CsvExporter11 csvExporter11() {
+    return new CsvExporter11(model11(), new CsvTransformer11());
+  }
+
+  @Bean
   public Model model11() {
     try {
       ConnectType TYPE = ConnectType.valueOf(connectType.toUpperCase());
@@ -41,15 +51,4 @@ public class CpdUtilsApplication {
     }
     return null;
   }
-
-  @Bean
-  public XmlExporter11 xmlExporter11() {
-    return new XmlExporter11(model11(), new XmlTransformer11());
-  }
-
-  @Bean
-  public CsvExporter11 csvExporter11() {
-    return new CsvExporter11(model11(), new CsvTransformer11());
-  }
-
 }

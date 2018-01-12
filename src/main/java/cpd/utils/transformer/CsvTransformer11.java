@@ -50,7 +50,7 @@ public class CsvTransformer11 implements Transformer {
     for (TCondition condition : tConditions) {
       TRule tRule = condition.getRule();
       Map<CsvHeader, String> currLine = new LinkedHashMap<>(promoLine);
-      if(tRule.getInfo() == null) {
+      if (tRule.getInfo() == null) {
         listOfLines.add(currLine);
         continue;
       }
@@ -79,6 +79,30 @@ public class CsvTransformer11 implements Transformer {
       }
     }
     return listOfMapsToText(listOfLines);
+  }
+
+  @Override
+  public List<String> serialize(List<Promotion> promotions) {
+    List<String> listCsv = new ArrayList<>();
+    for (Promotion promotion : promotions) {
+      //добавляем header
+      String head = CsvHeader.HEADER;
+      String body = serialize(promotion);
+      if (!StringUtils.isEmpty(body)) {
+        listCsv.add(head + body);
+      }
+    }
+    return listCsv;
+  }
+
+  @Override
+  public Promotion deserialize(String text) {
+    throw new NotImplementedException();
+  }
+
+  @Override
+  public List<Promotion> deserialize(List<String> text) {
+    throw new NotImplementedException();
   }
 
   private Map<CsvHeader, String> getEmptyLine() {
@@ -134,7 +158,8 @@ public class CsvTransformer11 implements Transformer {
     fillEligibilitiesLines(tRule.getEligibility(), currLine);
   }
 
-  private void fillEligibilitiesLines(List<TEligibility> tEligibilities, Map<CsvHeader, String> currLine) {
+  private void fillEligibilitiesLines(List<TEligibility> tEligibilities,
+                                      Map<CsvHeader, String> currLine) {
     if (tEligibilities == null || tEligibilities.isEmpty()) {
       listOfLines.add(currLine);
       return;
@@ -144,7 +169,8 @@ public class CsvTransformer11 implements Transformer {
     }
   }
 
-  private void getLineEligibility(@NonNull TEligibility tEligibility, Map<CsvHeader, String> currLine) {
+  private void getLineEligibility(@NonNull TEligibility tEligibility,
+                                  Map<CsvHeader, String> currLine) {
     currLine.put(ELIGIBILITY, tEligibility.getInfo().getType());
     try {
       TYPE_ELIGIBILITY typeEligibility = TYPE_ELIGIBILITY.valueOf(tEligibility.getInfo().getType());
@@ -176,7 +202,8 @@ public class CsvTransformer11 implements Transformer {
           currLine.put(MERCH_GROUP, merchId);
           listOfLines.add(currLine);
         } else {
-          TMerchandiseHierarchyGroupIDList merchIdList = tEligibility.getMerchandiseHierarchyGroup().getIDList();
+          TMerchandiseHierarchyGroupIDList merchIdList = tEligibility.getMerchandiseHierarchyGroup()
+                                                                     .getIDList();
           if (merchIdList != null) {
             List<String> IDs = merchIdList.getID();
             fillLinesByList(currLine, IDs, MERCH_GROUP);
@@ -190,12 +217,17 @@ public class CsvTransformer11 implements Transformer {
         log.error("Unhandled TYPE_ELIGIBILITY: " + typeEligibility + " in promo: " + currLine);
       }
     } catch (IllegalArgumentException e) {
-      log.error("Unexpected TYPE_ELIGIBILITY: " + tEligibility.getInfo().getType() + " in promo: " + currLine);
+      log.error("Unexpected TYPE_ELIGIBILITY: "
+                + tEligibility.getInfo().getType()
+                + " in promo: "
+                + currLine);
       listOfLines.add(currLine);
     }
   }
 
-  private void fillLinesByList(Map<CsvHeader, String> currLine, List<String> values, CsvHeader type) {
+  private void fillLinesByList(Map<CsvHeader, String> currLine,
+                               List<String> values,
+                               CsvHeader type) {
     for (String item : values) {
       Map<CsvHeader, String> line = new LinkedHashMap<>(currLine);
       line.put(type, item);
@@ -213,35 +245,11 @@ public class CsvTransformer11 implements Transformer {
     return sb.toString();
   }
 
-  @Override
-  public List<String> serialize(List<Promotion> promotions) {
-    List<String> listCsv = new ArrayList<>();
-    for (Promotion promotion : promotions) {
-      //добавляем header
-      String head = CsvHeader.HEADER;
-      String body = serialize(promotion);
-      if (!StringUtils.isEmpty(body)) {
-        listCsv.add(head + body);
-      }
-    }
-    return listCsv;
-  }
-
-  @Override
-  public Promotion deserialize(String text) {
-    throw new NotImplementedException();
-  }
-
-  @Override
-  public List<Promotion> deserialize(List<String> text) {
-    throw new NotImplementedException();
-  }
-
   enum TYPE_RULE {
-    GET3PAY2, SIMPLE, MIX_AND_MATCH, NO_REBATE;
+    GET3PAY2, SIMPLE, MIX_AND_MATCH, NO_REBATE
   }
 
   enum TYPE_ELIGIBILITY {
-    CUSTOMER_GROUP, ITEM, COUPON, MERCHANDISE_HIERARCHY_GROUP, MARKET_BASKET;
+    CUSTOMER_GROUP, ITEM, COUPON, MERCHANDISE_HIERARCHY_GROUP, MARKET_BASKET
   }
 }

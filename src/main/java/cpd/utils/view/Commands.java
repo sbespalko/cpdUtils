@@ -20,16 +20,19 @@ import org.springframework.shell.standard.ShellOption;
 public class Commands {
   private final Exporter csvExporter11;
   private final Exporter xmlExporter11;
-  @Setter @Getter private  ConsoleService console;
+  @Setter @Getter private ConsoleService console;
 
-  public Commands(ConsoleService console, CsvExporter11 csvExporter11, XmlExporter11 xmlExporter11) {
+  public Commands(ConsoleService console,
+                  CsvExporter11 csvExporter11,
+                  XmlExporter11 xmlExporter11) {
     this.console = console;
     this.csvExporter11 = csvExporter11;
     this.xmlExporter11 = xmlExporter11;
   }
 
   @ShellMethod("save promotions from CPD11 to <file.csv> (defaul=export11.csv)")
-  public void exportCsv11(@ShellOption(defaultValue = "export11.csv") String fileName, @ShellOption(defaultValue = "") String filter) throws IOException {
+  public void exportCsv11(@ShellOption(defaultValue = "export11.csv") String fileName,
+                          @ShellOption(defaultValue = "") String filter) throws IOException {
     console.answer("start exportCsv11 into \"%s\"", fileName);
     try {
       csvExporter11.exportTo(fileName, filter);
@@ -40,7 +43,8 @@ public class Commands {
   }
 
   @ShellMethod("save promotions from CPD11 to <folder> (default=raw11/)")
-  public void exportXml11(@ShellOption(defaultValue = "raw11") String dirName, @ShellOption(defaultValue = "") String filter) throws IOException {
+  public void exportXml11(@ShellOption(defaultValue = "raw11") String dirName,
+                          @ShellOption(defaultValue = "") String filter) throws IOException {
     console.answer("start exportXml11 into \"/%s\"", dirName);
     try {
       xmlExporter11.exportTo(dirName, filter);

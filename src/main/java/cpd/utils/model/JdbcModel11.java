@@ -19,10 +19,14 @@ import org.springframework.util.StringUtils;
 @Slf4j
 public class JdbcModel11 implements Model {
   private static final String PROMO_TABLE = "PD_PROMOTION_OVERVIEW";
-  private static final String[] PROMO_COLUMNS = new String[] { "PROMOTION_ID", "UI_DATA_LAST_CHANGED" };
-  private static final String GET_All_SQL = "SELECT " + String.join(",", PROMO_COLUMNS) + " FROM " + PROMO_TABLE + " ";
+  private static final String[] PROMO_COLUMNS = { "PROMOTION_ID", "UI_DATA_LAST_CHANGED" };
+  private static final String GET_ALL_SQL = "SELECT "
+                                            + String.join(",", PROMO_COLUMNS)
+                                            + " FROM "
+                                            + PROMO_TABLE
+                                            + " ";
 
-  private Transformer transformer;
+  private final Transformer transformer;
   @Autowired private JdbcTemplate jdbcTemplate;
 
   public JdbcModel11(Transformer transformer) {
@@ -36,12 +40,12 @@ public class JdbcModel11 implements Model {
 
   @Override
   public List<Promotion> getAll(String filter) {
-    return jdbcTemplate.query(GET_All_SQL + filter, (rs, rowNum) -> {
+    return jdbcTemplate.query(GET_ALL_SQL + filter, (rs, rowNum) -> {
       Promotion promotion = new Promotion();
       Blob blob = rs.getBlob(PROMO_COLUMNS[1]);
       String blobText = null;
       if (!rs.wasNull()) {
-        blobText = new String(blob.getBytes(1, (int) blob.length()), StandardCharsets.UTF_8);
+        blobText = new String(blob.getBytes(1L, (int) blob.length()), StandardCharsets.UTF_8);
       }
       if (!StringUtils.isEmpty(blobText)) {
         try {
@@ -52,8 +56,9 @@ public class JdbcModel11 implements Model {
       }
       long id = rs.getLong(PROMO_COLUMNS[0]);
       if (!rs.wasNull()) {
-        Promotion.GlobalData data =
-          promotion.getGlobalData() != null ? promotion.getGlobalData() : new Promotion.GlobalData();
+        Promotion.GlobalData data = promotion.getGlobalData() != null ?
+                                    promotion.getGlobalData() :
+                                    new Promotion.GlobalData();
         data.setID(String.valueOf(id));
         promotion.setGlobalData(data);
       }
@@ -62,9 +67,14 @@ public class JdbcModel11 implements Model {
   }
 
   @Override
+  public Map<Long, String> getRaw() {
+    return getRaw("");
+  }
+
+  @Override
   public Map<Long, String> getRaw(String filter) {
     Map<Long, String> result = new LinkedHashMap<>();
-    jdbcTemplate.query(GET_All_SQL + filter, (rs, rowNum) -> {
+    jdbcTemplate.query(GET_ALL_SQL + filter, (rs, rowNum) -> {
       long id = rs.getLong(PROMO_COLUMNS[0]);
       if (!rs.wasNull()) {
         Blob blob = rs.getBlob(PROMO_COLUMNS[1]);
@@ -77,10 +87,5 @@ public class JdbcModel11 implements Model {
       return result;
     });
     return result;
-  }
-
-  @Override
-  public Map<Long, String> getRaw() {
-    return getRaw("");
   }
 }

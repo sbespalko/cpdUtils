@@ -10,6 +10,7 @@ public interface Transformer {
 
   /**
    * promotion -> text
+   *
    * @param promotion
    * @return text of one promotion
    */
@@ -17,6 +18,7 @@ public interface Transformer {
 
   /**
    * promotion -> text
+   *
    * @param promotions
    * @return text of all promotions
    */
@@ -24,6 +26,7 @@ public interface Transformer {
 
   /**
    * text -> promotion
+   *
    * @param text
    * @return one promotion from text
    */
@@ -31,6 +34,7 @@ public interface Transformer {
 
   /**
    * text -> promotion
+   *
    * @param text
    * @return all promotions from text
    */

@@ -31,12 +31,21 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 public class XmlTransformer11 implements Transformer {
 
   @Override
+  public String serialize(Promotion promotion) {
+    throw new NotImplementedException();
+  }
+
+  @Override
+  public List<String> serialize(List<Promotion> promotions) {
+    throw new NotImplementedException();
+  }
+
+  @Override
   public Promotion deserialize(String text) throws JAXBException {
     if (StringUtils.isEmpty(text)) {
       return getEmptyPromotion(text, null);
     }
     //JAXB to convert XML into object;
-    PromotionRoot root = null;
     JAXBContext jaxbContext = JAXBContext.newInstance(PromotionRoot.class);
     Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 
@@ -50,7 +59,7 @@ public class XmlTransformer11 implements Transformer {
       throw new RuntimeException(e);
     }
     SAXSource saxSource = new SAXSource(reader, inputSource);
-    root = (PromotionRoot) jaxbUnmarshaller.unmarshal(saxSource);
+    PromotionRoot root = (PromotionRoot) jaxbUnmarshaller.unmarshal(saxSource);
     if (root == null || root.getPromotion() == null) {
       return getEmptyPromotion(text, null);
     }
@@ -85,16 +94,6 @@ public class XmlTransformer11 implements Transformer {
         return getEmptyPromotion(promoString, e);
       }
     }).collect(toList());
-  }
-
-  @Override
-  public String serialize(Promotion promotion) {
-    throw new NotImplementedException();
-  }
-
-  @Override
-  public List<String> serialize(List<Promotion> promotions) {
-    throw new NotImplementedException();
   }
 
 }
